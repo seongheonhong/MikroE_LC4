@@ -56,6 +56,15 @@ void loadcell4_cfg_setup ( loadcell4_cfg_t *cfg, uint8_t intpin, uint8_t enpin )
     cfg->i2c_speed   = 100000;
     cfg->i2c_address = LOADCELL4_SET_DEV_ADDR;
 }
+void loadcell4_cfg_setup ( loadcell4_cfg_t *cfg, uint8_t intpin, uint8_t enpin, uint8_t _i2c_addr ) 
+{
+    // Additional gpio pins
+    cfg->en   = enpin;
+    cfg->int_pin = intpin;
+
+    cfg->i2c_speed   = 100000;
+    cfg->i2c_address = _i2c_addr;
+}
 uint8_t loadcell4_init ( loadcell4_t *ctx, loadcell4_cfg_t *cfg ) 
 {
     ctx->slave_address = cfg->i2c_address;
@@ -137,7 +146,7 @@ uint16_t loadcell4_read_bridge_data ( loadcell4_t *ctx ) {
 
     status_data = LOADCELL4_STATUS_ERROR;
 
-    while ( status_data != LOADCELL4_STATUS_NORMAL ) {
+    while ( status_data != LOADCELL4_STATUS_NORMAL ) {        
         loadcell4_read_raw( ctx, &raw_data );
         dev_measure_delay( );
 
@@ -469,13 +478,13 @@ static void dev_i2c_write ( loadcell4_t *ctx, uint8_t cmd_byte, uint16_t write_w
 
 static void dev_i2c_read ( loadcell4_t *ctx, uint8_t *read_buf ) {
 
-    //i2c_master_read( &ctx->i2c, read_buf, 4 );
-
-    Wire.requestFrom( ctx->slave_address , 4 );
+    //i2c_master_read( &ctx->i2c, read_buf, 4 );    
+    Wire.requestFrom( ctx->slave_address , 4);
+    //Serial.println("CALLED");
     //while ( !Wire.available() && (millis() - nowmil) < 10 )	
     for(uint8_t i = 0; Wire.available() && (i < 4); i++){
         read_buf[i] = Wire.read();
-	//Serial.printf("%02X ", read_buf[i]);
+	    //Serial.printf("%02X ", read_buf[i]);
     }
     //Serial.print("\n");
 }

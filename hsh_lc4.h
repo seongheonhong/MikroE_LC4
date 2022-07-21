@@ -196,6 +196,7 @@ typedef enum
 
 
 void loadcell4_cfg_setup ( loadcell4_cfg_t *cfg, uint8_t intpin, uint8_t enpin );
+void loadcell4_cfg_setup ( loadcell4_cfg_t *cfg, uint8_t intpin, uint8_t enpin, uint8_t _i2c_addr );
 uint8_t loadcell4_init ( loadcell4_t *ctx, loadcell4_cfg_t *cfg );
 uint8_t loadcell4_default_cfg ( loadcell4_t *ctx );
 uint8_t loadcell4_generic_write ( loadcell4_t *ctx, uint8_t reg, uint8_t *tx_buf, uint8_t tx_len );
